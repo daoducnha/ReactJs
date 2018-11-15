@@ -193,3 +193,107 @@ Preventing Rendering
 			)
 
 With the && operator, true and expression will always evaluate to expression. On the other hand, false and expression will always evaluate to false which won't render.
+
+
+================================================
+
+
+
+Class Components
+	- React Components can also be written using ES6 classes.
+	- have life cycle methods and state.
+	- two instance properties, this.state and this.props. Represent the component's state and properties respectively.
+
+	Both types of React Components can be used by writing their name within an HTML tag: var element = <Welcome/>
+	- render() method of a class component is used to describe what kind of React Element is going to be returned from the Class Component
+	- render() same as the return value of a Functional Component;
+
+Adding properties to Class Components:
+	- The properties of a Class Component can be accessed through the this.props attribute.
+	- differs slightly from Functional Components where the properties were passed in as a variable.
+	Ex: render(){
+        return <h1>Message: {this.props.message}</h1>
+    }
+================================================
+
+State component:
+
+Constructor(props)
+	- constructor() method is called before a React Component is mounted and is used to set up the initial state of the component.
+	- It is important to call super(props) at the beginning of the constructor() method or else the this.props attribute may not work correctly
+	-  first argument represents the properties that are passed into the component.
+
+		EX:  constructor(props){
+			super(props)
+		    }
+
+Adding an initial state to Class Components: 
+	initial state of a Class Component can be declared within the constructor() The state of the component must be declared as an object with attributes.
+		EX:
+			constructor(props){
+				super(props)
+				this.state = {foo:123,bar:456} ==> init state component
+			    }
+			render(){
+				return <div>foo:{this.state.foo} bar:{this.state.bar}</div>
+			    }
+Updating state: - The setState(updater,[callback]) method is used to update state component 
+		- It takes in an updater object and updates the component state by shallowly merging the updater object's attributes with the 			previous component state
+		-  The method updates the state asynchronously => option callback that will be called once the state has finished updating completely.
+		- In order to use the setState() method, it must be referenced by calling this.setState().
+
+		The setState method will trigger the updating phase of the component lifecycle to start ===> the component to rerender unless 			the shouldComponentUpdate() function returns false.
+
+		Ex:   	constructor(props){
+				super(props)
+				//initial state set up
+				this.state = {message:"initial message"}
+			    }
+			componentDidMount(){
+				//updating state
+				this.setState({message:"new message"})
+			    }
+
+Updating state based on previous state
+	-  setState() method does not immediately update the state of the component, it just puts the update in a queue to be processed later
+	-  React may batch multiple update requests together to make rendering more efficient
+	=> special precautions must be made when updating the state based on the component's previous state. 
+	- The method updates the state asynchronously, => option callback that will be called once the state has finished updating completely.
+
+	EX:
+		this.setState((prevState, props) => { 
+		    return {attribute:"value"}
+		})
+
+Using future state values:
+	Since state updates asynchronously, you can not just expect the state values to update immediately after a setState() method call
+
+State is not mutable:
+	- State is read only =>  If the state needs to be updated, the setState() method is the only way to change the state.
+	- you should not try to manually change the values of the state attributes.
+	EX:		
+		//incorrect, state should not be mutated directly
+		this.state.message = "new message"
+
+===========================
+
+
+Life Cycle Methods
+	Mounting Phase Methods: The mounting phase begins when an instance of a component is created and rendered into the DOM.
+
+		1- constructor(props) - called when the component is first initialized. This method is only called once.
+		2- componentWillMount() - called when a component is about to mount.
+		3- render() - called when a component is rendered.
+		4- componentDidMount() - called when a component has finished mounting. This is where network requests are usually made.
+		
+	Updating Phase Methods: begins when a component's properties or state changes.
+		
+		1- componentWillReceiveProps(nextProps) - called when a component has updated and is receiving new props.
+		2- shouldComponentUpdate(nextProps, nextState) - called after receiving props and is about to update. If this method returns 				false, componentWillUpdate(), render(), and componentDidUpdate() will not execute.
+		3- componentWillUpdate(nextProps, nextState) - called when a component is about to be updated.
+		4- render() - called when a component is rerendered.
+		5- componentDidUpdate(prevProps, prevState) - called when a component has finished updating.
+			Unmounting Phase Methods:  when a component is being removed from the DOM.
+
+		1- componentWillUnmount() - called immediately before a component unmounts. This is where any cleanups are made such as 			cancelling timers or network requests.
+

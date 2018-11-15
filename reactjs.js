@@ -203,3 +203,45 @@ Select Type" items = {["All","Cars","Trucks","Convertibles"]} />
 }
 
 ReactDOM.render(<TransportationApp />, document.getElementById('root'));
+
+
+===============================
+
+
+class Welcome extends React.Component{
+    constructor(props){
+      super(props)
+      this.state = {value: 0}
+    }
+    componentDidMount(){
+	//Methode se ko dong bo =>ket qua khong mong muon
+      this.setState({value:this.state.value + 1})
+	//Dung callback function de dc ket qua mong muon
+	this.setState((preState, props)=>{
+        return {value:preState.value + 1}
+      })
+    }  
+    render(){
+        return <h1>Hello World! {this.props.message} with {this.state.value}</h1>
+    }
+}
+
+
+=========================
+
+class Counter extends React.Component{
+  constructor(props){
+    super(props)
+    this.state = {count: 0}
+	//Quan trong
+    this.clickHandler = this.clickHandler.bind(this)
+  }
+  
+  clickHandler(){
+    this.setState({count: this.state.count +1})
+  }
+  render(){
+    return <button onClick = {this.clickHandler}>{this.state.count}</button>
+  }
+}
+
