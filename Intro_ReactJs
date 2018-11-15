@@ -1,0 +1,195 @@
+What is ReactJS?
+- ReactJS is a library that generates the view layer of an application based on its state, ReactJS applications are built from React Components - independent resusable components that describe how the UI should look based on their own state and properties.
+
+
+Why should I use ReactJS?
+ReactJS applications are incredibly performant at UI rerendering
+React Components make writing UI components easier
+
+What makes ReactJS so efficient at rerendering?
+
+- React Components are used to generate a Virtual DOM
+- Virtual DOM is able to be generated much more quickly than the HTML DOM because it does not have to calculate CSS styles and layouts
+- When a React Component changes state,the Virtual DOM is recreated and the difference between the new Virtual DOM and the previous Virtual DOM is calculated
+- ReactJS library then calculates the most efficient way to update the HTML DOM to reflect these changes=>faster than regenerating the entire HTML DOM from the top.
+
+EX:  <div id="root"></div>
+
+    ReactDOM.render(
+        <h1>Hello World!</h1>,
+        document.getElementById("root")
+    )
+
+React element:
+
+- React Elements are objects that represent a DOM node
+- using a syntax extension named JSX
+- React Elements are different than React Components
+	EX:  var element = <h1>Hello World!</h1>
+
+- React Elements need to be rendered by the ReactDOM.render() method to appear in the DOM.
+
+****ReactDOM.render(): is method is used to render a React Element into a specified part of the HTML DOM
+ most React applications, there is usually a single root node where everything gets rendered into, but you may use as many root nodes as you desire.
+
+Rerendering the DOM using additional render() calls
+
+- Once a DOM is rendered, it will remain the same until another render() method is called.
+
+- The following example uses additional render() calls to update the displayed number
+
+
+
+
+
+
+
+
+What is JSX?
+
+JSX is a syntax extension to JavaScript that allows React Elements to be written inside JavaScript using HTML tags.
+	with JSX: var element = <h1>Hello World!</h1>
+	without JSX: 
+		var element = React.createElement(
+			'h1',
+			null,
+			'Hello World!'
+		    )
+Using JSX with JavaScript Expressions:
+	Curly braces can be used to embed JavaScript expressions into JSX.
+	Ex:
+	    var str = "World!" 
+
+	    var element =  <h1> Hello {str}</h1> => Hello World!
+
+
+	ex2:
+		var item = {
+			name: "Cheese",
+			price: 5
+		    }
+	    var element = <p>{item.name} : ${item.price} </p>
+
+	EX3:
+	    var length = 20
+	    var width = 10
+
+	    function calculateArea(x,y){
+		return x * y
+	    }
+
+	    var element = <div>The Area is: {calculateArea(length,width)}</div>
+Using JSX with Attributes:
+	You can supply attribute values using a string literal surrounded by quotes:
+		Ex:  var element = <button className ="deleteButton"> Delete </button>  : className ="deleteButton"
+
+	You can also supply attributes values by embedding a JavaScript expression using curly braces:
+		EX:  var element = <img src ={product.imageURL}></img>
+	
+	Do not surround curly braces with quotes. This will cause your expression to be treated as a string literal:
+
+	    //Do not do this
+	    var element = <img src ="{product.imageURL}"></img>
+
+
+	attribute "class" becomes "className" because "class" is a reserved keyword in JavaScript
+	 attribute names in JSX follow the camelCase naming convention so an HTML attribute such as fontsize would become fontSize in JSX.
+
+Using JSX with Empty Tags
+	If a HTML tag is empty, you can close it with a '/>' instead of using a closing tag.
+	EX:  var element = <input className ="nameInput"/>
+Using JSX with a Style Object
+	The style attribute can be populated with a style object instead of a string literal
+	Ex: 
+	 var styleObject = {
+		backgroundColor: 'red',
+		color:'blue',
+		fontSize: 25,
+		width: 100
+	    }
+
+	=>    var element = <input style = {styleObject}/>
+
+ JSX expression while the second set of curly braces is for the style object:
+
+	var element = <input style = {{width:200,height:100}}/>
+
+Using JSX with Nested Elements
+	React Elements can be nested within other React Elements as long as the whole thing is wrapped by in a single element.
+
+	Ex: var element = (
+				<div>
+				    <div>Hello World</div>
+				    <div>Hello World</div>
+				</div>
+
+			    )   ======> neu bo the div ngoai cung se bi loi
+
+Using JSX Objects: Objects created with JSX can be manipulated just like normal JavaScript objects. They can be passed in arrays, used as arguments or return statements to functions and used inside if statements or for loops.
+
+
+
+
+
+
+
+===================================
+
+
+There are two types of React Components:
+Class Components: have state, lifecycle methods, and properties
+Functional Components:  only have properties.  just functions that output React Elements.By convention, the first letter of the function name should be capitalized
+
+	function HelloWorld(){// return some element    }
+use the React Component in JSX by creating an HTML tag with the same name as the React Component
+	==> use: var element = <HelloWorld/>
+		OR:
+		  ReactDOM.render(
+			<HelloWorld/>,
+			document.getElementById("root")
+		    )
+	Adding Properties to Functional Components
+		 function HelloWorld(props){
+			return <h1>Message: {props.message}</h1>
+		 }
+	You can supply property values the same way as you supply attribute values,
+	Properties can be string literals, arrays or any other type of JavaScript object including other React Elements
+		EX: 
+			<HelloWorld message="Hello World!"/>,
+			<HelloWorld index = "3" numberArray={[1,2,3,4,5]}/> =======>  function HelloWorld(props){
+										return <h1>Value: {props.numberArray[props.index]} </h1>
+										    	}
+Composing Components: 
+
+	Functional Components can include other Functional Components in their output => This lets us keep our components organized and readible.
+
+Conditional Rendering
+	The output of a Functional Component can be determined based on its properties.
+	EX: 
+		function Feature(props){
+			if (props.active == true){
+			    return <h1>This feature is active</h1>
+			}
+			else{
+			    return <h1>This feature is not active</h1>
+			}
+
+		    }
+
+	OR
+		 function Feature(props){
+			return <h1>This feature is {props.active? "active" : "not active"}</h1>
+		    }
+
+Preventing Rendering
+	The output of a Functional Component can be prevented from rendering.
+
+	 return null => khong render
+
+	You can also conditionally prevent a feature from rendering using the && operator:
+
+		return (
+			    props.active && <h1>{props.message}</h1>
+			)
+
+With the && operator, true and expression will always evaluate to expression. On the other hand, false and expression will always evaluate to false which won't render.
