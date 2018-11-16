@@ -296,4 +296,24 @@ Life Cycle Methods
 			Unmounting Phase Methods:  when a component is being removed from the DOM.
 
 		1- componentWillUnmount() - called immediately before a component unmounts. This is where any cleanups are made such as 			cancelling timers or network requests.
+==========================
 
+Adding Event Handlers
+
+	Handling events in React is similar to handling events in HTML. To attach an event handler to a React Element, assign the event handler method to the appropriate event attribute.
+	React is that you can use JSX brackets to specify the event handler function
+	React events are named using camelCase instead of being all lowercase.  For example, onclick and onkeypress in HTML become onClick and onKeyPress in React respectively.
+	EX: <button onClick = {clickHandler} >Click Me</button>
+
+Binding Event Handlers to Class Components: Event handlers can be defined as methods within a class Component.
+	 bind() method is used to bind the clickHandler() method's this keyword to the component instance. EX: 
+		this.clickHandler = this.clickHandler.bind(this)
+	. Without binding the function, the function will have its this keyword point to an incorrect object and the setState() method will not work correctly.
+	An alternative to using bind() is to attach the event handler to the React Element using an ES6 arrow function: The arrow function will automatically have its this keyword point to the enclosing scope which happens to be the component instance.
+
+	Ex: <button onClick = {{ () => this.clickHandler()}}>{this.state.count}</button>
+=================== 
+
+Lifting State Up
+
+The setState() method only allows components to update their own state.
