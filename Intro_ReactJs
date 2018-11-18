@@ -317,3 +317,167 @@ Binding Event Handlers to Class Components: Event handlers can be defined as met
 Lifting State Up
 
 The setState() method only allows components to update their own state.
+
+===============================
+
+
+Rendering arrays of React Elements
+JSX will render an array of React Elements as long as there is at least one element enclosing all of the array elements.
+		elements will be inserted into the enclosing element:
+	EX:  
+		var elements = [] 
+		var array = [1,2,3,4,5]
+
+		for(let i = 0; i < array.length; i++){
+		   elements.push(<li>{array[i]}<li/>) //push tag <li> element gi do </li> (trong 1 tag co mo va dong)
+		}
+
+
+		ReactDOM.render(
+		  <ol>{elements}</ol>, // render ra html bang cach khai bao {element}
+		  document.getElementById('root')
+		)
+Using Map() to render arrays of React Elements
+	map() method is often used to create an array of React Elements
+	map() method is called on an array and returns a new array with a provided function applied to each element in the original array
+	EX:
+		
+	var array = [
+	  {product:"Apple", price:3},
+	  {product:"Banana", price:1},
+	  {product:"Carrot", price:2},
+	  {product:"Donuts", price:5},
+	  {product:"Eggplant", price:4}
+	]
+
+	var elements = array.map((item) => {
+	  return <li>Product:{item.product} | Price: ${item.price}</li>
+	})
+
+Hoac dung truc tiep trung phuong thuc render :
+	EX:
+		ReactDOM.render(
+		  <ol>{
+		      array.map( (item) => 
+			  <li>Product: {item.product} | Price: ${item.price} </li>
+		      )}
+		  </ol>,
+		  document.getElementById('root')
+		)
+Adding Keys to List Items: React uses Keys to help render list items quickly  Keys should be a string that uniquely identifies a list item from the other items on the list, such as an ID attribute.
+
+	var array =[
+		  {id: 100, product:"Apple", price:3},
+		  {id: 104, product:"Eggplant", price:4}
+		]
+
+	var elements = array.map( (item) => {
+	  return <li key={item.id}>Product: {item.product} | Price: ${item.price}  </li> ///  Add key: key={item.id}
+	})
+If your array items do not have anything that can uniquely identify them, you can use the item index as a last resort for the key value.
+	EX: return <li key={index}>Product: {item.product} | Price: ${item.price}  </li>>
+
+Building a List Component:
+	It is useful to be able to build a React Component that can dynamically generate a list from an array property that is passed into it.
+	Ex:
+	class ProductList extends React.Component{
+	  
+	  render(){
+	    var elements = this.props.productArray.map( (item,index) => {
+	      return <li key={item.id}>Product: {item.product} | Price: ${item.price}  </li>
+	    })
+	    return <ol>{elements}</ol>
+	  }
+	}
+
+	var array =[
+	  //some element 
+	]
+
+	ReactDOM.render(
+	  <ProductList productArray = {array}/>,
+	  document.getElementById('root')
+	)
+
+Extracting List Items
+	Each list item may be extracted into its own React Component to make the code more maintainable.
+	If the list items are extracted, the keys do not need to be passed down to the list item components
+	Keys are only necessary when React Elements are generated dynamically using arrays: key chi can khi react element generate tu dong khi su dung mang
+EX:
+	function ListItem(props){
+	  //khong xai array de render => khong can dung key 
+	  return <li>Product: {props.product} | Price: ${props.price}  </li>
+	  
+	}
+
+
+	class ProductList extends React.Component{
+	  render(){
+	    var elements = array.map( (item,index) => {
+	      //need to add a key here vi can xai array de render
+	      return <ListItem key={item.id} product={item.product} price = {item.price}/>
+	    })
+
+	    return (
+	      <ol>
+		{elements}
+	      </ol>
+	    )
+
+	  }
+
+Controlled Components
+	We accomplish this by doing the following two steps:
+
+	Whenever the input value is changed, call an event handler to update the component state to the new input value
+	Re render the the React Element with its value attribute set to the updated state input value
+
+Controlling Input fields
+	To turn an input field into a Controlled Component, we must first declare an event handler that will update the state input value whenever the form input value is changed.
+	The event.target.value attribute can be used to obtain the form input value:
+
+	 handleChange(event){
+		this.setState({value: event.target.value})
+	    }
+	
+ attach the event handler to the <input> element and set the input value equal to the state input value:
+	render(){
+		return (
+		    <input type = "text" value = {this.state.value} onChange = {this.handleChange}/>
+		)
+	    }
+Lastly, we must not forget to bind the event handler to the component instance and also declare the initial state value:
+
+	constructor(props){
+		super(props)
+		this.state = {value: ''}
+		this.handleChange = this.handleChange.bind(this)
+	    }
+
+=>>
+	class ControlledInput extends React.Component{
+
+	    constructor(props){
+		super(props)
+		this.state = {value: ''}
+		this.handleChange = this.handleChange.bind(this)
+	    }
+	    handleChange(event){
+		this.setState({value: event.target.value}) // add event khi change
+	    }
+	    render(){
+		return (
+		    <input type = "text" value = {this.state.value} onChange = {this.handleChange}/>
+		)
+	    }
+	}
+
+vs check box:  	this.state = {checked: false}
+		this.setState({checked: event.target.checked})
+		<input type = "checkbox" checked = {this.state.checked} onChange = {this.handleChange}/>
+
+
+Handling Multiple Inputs
+	 this.setState({[event.target.name]: event.target.value})
+	 <input name="inputName" type = "input" value = {this.state.inputName} onChange = {this.handleChange}/>	=> name="inputName"  value = {this.state.inputName} chi ra ten cua event trung voi attribute name
+

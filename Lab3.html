@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+  <head>
+       <meta charset="UTF-8">
+       <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
+       <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.24.0/babel.js"></script>
+
+  </head>
+  <body>
+      <div id="root"></div>
+      <script type="text/babel">
+       
+       function InputField(props){
+           return(
+               <div>
+                    <h2>{props.title}</h2>
+                    <input type = "text" value={props.value} />
+               </div>
+            )
+       }
+       
+       function SelectField(props){
+           var array = ["Science Lab","Swimming","Cooking","Painting"]
+           return(
+               <div>
+                    <h2>{props.title}</h2>
+                    <select>
+                            {array.map((item,index)=>{
+                                return <option key={index} value={item}>{item}</option>
+                            })}
+                    </select>
+                </div>
+           )
+       }
+
+       function CheckBoxField(props){
+           var array = [
+                            "a) Dietary Restrictions",
+                            "b) Physical Disabilities",
+                            "c) Medical Needs"
+                        ]
+            var style ={
+                display: "inline-block"
+            }
+           return(
+               <div>
+                    <h2>{props.title}</h2>
+                    
+                        {array.map((item)=>{
+                            return (
+                                <div>
+                                    <input type = "checkbox" value = "false"/>
+                                    <p style= {style}> {item} </p>
+                                </div>
+                            )
+                        })}                    
+               </div>
+           )
+       }
+       
+       function Button(props){
+           var style = {
+               width: props.width,
+               height: props.height
+           }
+           return(
+               <button style = {style}>{props.label}</button>
+           )
+       }
+       function Post(props){
+           return(
+               <tr>
+                    <th><Button label="X"/></th>
+                    <th>{props.firstName}</th>
+                    <th>{props.lastName}</th>
+                    <th>{props.activity}</th>
+                    <th>{props.restrictions}</th>
+               </tr>
+           )
+       }
+
+       function ListPost(props){
+           var columnLabels = ["Remove","FirstName","LastName","Activity","Restrictions"]
+           var style = {
+            width:"100%"
+           }
+           return(
+               <table style={style}>
+                    <tr>
+                        {columnLabels.map((item) => {
+                          return <td>{item}</td>
+                        })}
+                    </tr>
+                    <tr>
+                        {
+                            props.listPost.map((item, index) => {
+                                return (
+                                    <Post key={index} 
+                                    firstName={item.firstName}
+                                    lastName={item.lastName}
+                                    activity={item.activity}
+                                    restrictions={item.restrictions}/>
+                                )
+                            })
+                        }
+                    </tr>
+               </table>
+           )
+       }
+
+       class App extends React.Component{
+           constructor(props){
+               super(props)
+               this.state = {items:[], firstName:"",lastName:"", activity:"Science Lab", restrictions:[]}
+           }
+           
+           render(){
+               return(
+                    <div>
+                        <div>
+                            <InputField title="First Name"/>
+                            <InputField title="Last Name"/>
+                            <SelectField title="Select Activity"/>
+                            <CheckBoxField title="Check all that apply"/>
+                            <Button label="Submit" width="200" height="50"/>                    
+                        </div>
+                        <div>
+                            <ListPost listPost={this.state.items}/>
+                        </div>
+                    </div>
+               )
+           }
+       }
+
+        ReactDOM.render(
+          <App />,
+          document.getElementById("root")
+        )
+      </script>
+  
+  </body>
+</html>
